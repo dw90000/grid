@@ -1,1 +1,88 @@
-Hello World
+<!DOCTYPE html>
+<html dir="ltr" lang="ja">
+<head>
+<meta charset="utf-8">
+<title>GRID</title>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+</style> 
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+
+function Grid(_id){
+  this.id = _id;
+  this.theCanvas = document.getElementById(this.id);
+  this.context = this.theCanvas.getContext("2d");
+  this.fillcolor = '#000';
+  this.lineColor = '#9AFEF5';
+  this.canvasWidth;
+  this.canvasHeight;
+
+  this.resize();
+}
+
+Grid.prototype.resize = function(){
+
+  this.theCanvas.width = this.canvasWidth = window.innerWidth;
+  this.theCanvas.height = this.canvasHeight = window.innerHeight;
+
+  this.drawScreen();
+}
+
+Grid.prototype.drawScreen = function(){
+
+  this.context.clearRect(0,0,this.canvasWidth,this.canvasHeight);
+
+  // this.context.beginPath();
+
+  this.context.rect(0,0,this.canvasWidth,this.canvasHeight);
+  this.context.fillStyle = this.fillcolor;
+  this.context.fill();
+
+  var VERTICAL_LINE_SPACING = 100;
+  var x = this.canvasWidth;
+  var y = this.canvasHeight;
+  this.context.strokeStyle = this.lineColor;
+  this.context.lineWidth = 1;
+  
+  while(x > 0){
+    this.context.beginPath();
+    this.context.moveTo(x+0.5,0);
+    this.context.lineTo(x+0.5,this.canvasHeight);
+    this.context.stroke();
+    this.context.closePath();
+    x -= VERTICAL_LINE_SPACING;
+  }
+
+  while(y > 0){
+    this.context.beginPath();
+    this.context.moveTo(0,y+0.5);
+    this.context.lineTo(this.canvasWidth,y+0.5);
+    this.context.stroke();
+    this.context.closePath();
+    y -= VERTICAL_LINE_SPACING;
+  }
+
+}
+
+var c = new Grid('canvas','movie');
+
+var timer = 0;
+
+window.onresize = function () {
+  if (timer > 0) {
+    clearTimeout(timer);
+  }
+  timer = setTimeout(function () {
+    c.resize();
+  }, 200);
+};
+
+</script>
+</body>
+</html>
